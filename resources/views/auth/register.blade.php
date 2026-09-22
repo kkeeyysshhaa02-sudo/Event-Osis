@@ -51,13 +51,13 @@
                     </div>
                 </div>
 
-                <div>
+                <!-- <div>
                     <label for="role" class="block text-sm font-semibold text-gray-700 mb-1">Daftar Sebagai (Role)</label>
                     <select name="role" id="role" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm">
                         <option value="peserta" {{ old('role') == 'peserta' ? 'selected' : '' }}>Peserta (Siswa)</option>
                         <option value="panitia" {{ old('role') == 'panitia' ? 'selected' : '' }}>Panitia OSIS</option>
                     </select>
-                </div>
+                </div> -->
 
                 <div>
                     <label for="password" class="block text-sm font-semibold text-gray-700 mb-1">Password</label>

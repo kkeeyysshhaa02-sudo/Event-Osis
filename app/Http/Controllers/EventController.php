@@ -6,7 +6,6 @@ use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
 use App\Models\Category;
 use App\Models\Event;
-use App\Models\Registration;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -58,12 +57,9 @@ class EventController extends Controller
         $event->load(['category', 'creator', 'registrations.user']);
         $event->loadCount('activeRegistrations');
 
-        $userRegistration = null;
-        if (Auth::check()) {
-            $userRegistration = Registration::where('user_id', Auth::id())
-                ->where('event_id', $event->id)
-                ->first();
-        }
+        $userRegistration = Auth::check()
+            ? $event->registrations->firstWhere('user_id', Auth::id())
+            : null;
 
         return view('events.show', compact('event', 'userRegistration'));
     }

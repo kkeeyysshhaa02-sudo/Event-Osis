@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 
 class UserController extends Controller
@@ -24,6 +26,35 @@ class UserController extends Controller
         })->latest()->paginate(10)->withQueryString();
 
         return view('users.index', compact('users', 'search', 'role'));
+    }
+
+    public function create(): View
+    {
+        return view('users.create');
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', Password::min(8)],
+            'role' => ['required', Rule::in(['admin', 'panitia', 'peserta'])],
+            'kelas' => ['nullable', 'string', 'max:50'],
+            'phone' => ['nullable', 'string', 'max:20'],
+        ]);
+
+        User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'role' => $validated['role'],
+            'kelas' => $validated['kelas'] ?? null,
+            'phone' => $validated['phone'] ?? null,
+        ]);
+
+        return redirect()->route('users.index')
+            ->with('success', "Akun pengguna {$validated['name']} berhasil ditambahkan.");
     }
 
     public function updateRole(Request $request, User $user): RedirectResponse

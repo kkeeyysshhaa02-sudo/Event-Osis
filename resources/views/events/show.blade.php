@@ -12,7 +12,7 @@
     </div>
 
     <!-- Main Detail Card -->
-    <div class="bg-white rounded-2xl shadow-sm border border-emerald-100 overflow-hidden">
+    <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-emerald-100 dark:border-gray-800 overflow-hidden">
         <!-- Event Header Banner -->
         <div class="h-64 bg-gradient-to-r from-emerald-800 via-emerald-700 to-emerald-600 relative flex items-center justify-center">
             @if($event->image)
@@ -41,10 +41,10 @@
 
         <!-- Event Body -->
         <div class="p-6 sm:p-8 space-y-6">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-100 pb-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-100 dark:border-gray-800 pb-6">
                 <div>
-                    <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">{{ $event->name }}</h1>
-                    <p class="text-xs text-gray-500 mt-1">Dibuat oleh: <span class="font-bold text-gray-700">{{ $event->creator->name }}</span> &bull; {{ $event->created_at->format('d M Y') }}</p>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">{{ $event->name }}</h1>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Dibuat oleh: <span class="font-bold text-gray-700 dark:text-gray-300">{{ $event->creator->name }}</span> &bull; {{ $event->created_at->format('d M Y') }}</p>
                 </div>
 
                 <!-- Admin / Panitia Action Buttons -->
@@ -68,111 +68,155 @@
 
             <!-- Event Information Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div class="p-4 bg-emerald-50/60 rounded-xl border border-emerald-100">
-                    <span class="text-xs font-bold text-emerald-800 uppercase tracking-wider block">Waktu Pelaksanaan</span>
-                    <span class="text-sm font-bold text-gray-900 mt-1 block">📅 {{ $event->event_date->format('d M Y, H:i') }} WIB</span>
+                <div class="p-4 bg-emerald-50/60 dark:bg-gray-800/80 rounded-xl border border-emerald-100 dark:border-gray-700">
+                    <span class="text-xs font-bold text-emerald-800 dark:text-emerald-400 uppercase tracking-wider block">Waktu Pelaksanaan</span>
+                    <span class="text-sm font-bold text-gray-900 dark:text-white mt-1 block"> {{ $event->event_date->format('d M Y, H:i') }} WIB</span>
                 </div>
 
-                <div class="p-4 bg-emerald-50/60 rounded-xl border border-emerald-100">
-                    <span class="text-xs font-bold text-emerald-800 uppercase tracking-wider block">Lokasi Event</span>
-                    <span class="text-sm font-bold text-gray-900 mt-1 block">📍 {{ $event->location }}</span>
+                <div class="p-4 bg-emerald-50/60 dark:bg-gray-800/80 rounded-xl border border-emerald-100 dark:border-gray-700">
+                    <span class="text-xs font-bold text-emerald-800 dark:text-emerald-400 uppercase tracking-wider block">Lokasi Event</span>
+                    <span class="text-sm font-bold text-gray-900 dark:text-white mt-1 block"> {{ $event->location }}</span>
                 </div>
 
-                <div class="p-4 bg-emerald-50/60 rounded-xl border border-emerald-100">
-                    <span class="text-xs font-bold text-emerald-800 uppercase tracking-wider block">Kapasitas / Sisa Kuota</span>
-                    <span class="text-sm font-bold {{ $event->isFull() ? 'text-red-600' : 'text-emerald-900' }} mt-1 block">
-                        👥 {{ $event->active_registrations_count }} / {{ $event->capacity }} (Sisa: {{ $event->availableSeats() }})
+                <div class="p-4 bg-emerald-50/60 dark:bg-gray-800/80 rounded-xl border border-emerald-100 dark:border-gray-700">
+                    <span class="text-xs font-bold text-emerald-800 dark:text-emerald-400 uppercase tracking-wider block">Kapasitas / Sisa Kuota</span>
+                    <span class="text-sm font-bold {{ $event->isFull() ? 'text-red-600 dark:text-red-400' : 'text-emerald-900 dark:text-emerald-300' }} mt-1 block">
+                         {{ $event->active_registrations_count }} / {{ $event->capacity }} (Sisa: {{ $event->availableSeats() }})
                     </span>
                 </div>
             </div>
 
             <!-- Description -->
             <div>
-                <h3 class="text-base font-bold text-gray-900 mb-2">Deskripsi Lengkap Event</h3>
-                <div class="text-sm text-gray-700 leading-relaxed bg-gray-50 p-5 rounded-xl border border-gray-100 whitespace-pre-line">
+                <h3 class="text-base font-bold text-gray-900 dark:text-white mb-2">Deskripsi Lengkap Event</h3>
+                <div class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed bg-gray-50 dark:bg-gray-800/60 p-5 rounded-xl border border-gray-100 dark:border-gray-700 whitespace-pre-line">
                     {{ $event->description }}
                 </div>
             </div>
 
-            <!-- Registration Action Box -->
-            <div class="mt-8 pt-6 border-t border-emerald-100">
+            <!-- Registration / Management Action Box -->
+            <div class="mt-8 pt-6 border-t border-emerald-100 dark:border-gray-800">
                 @auth
-                    @if($userRegistration)
-                        <!-- Already Registered Status Box -->
-                        <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200 flex flex-col md:flex-row items-center justify-between gap-4">
-                            <div>
-                                <h4 class="font-bold text-emerald-900 text-base">Anda Telah Mendaftar Event Ini</h4>
-                                <p class="text-xs text-emerald-700 mt-0.5">
-                                    Tanggal Pendaftaran: {{ $userRegistration->registration_date->format('d M Y, H:i') }} WIB
-                                </p>
-                            </div>
-                            <div class="flex items-center space-x-3">
-                                <span class="px-3 py-1.5 rounded-lg font-bold text-xs uppercase shadow-sm
-                                    {{ $userRegistration->status === 'approved' ? 'bg-emerald-600 text-white' : '' }}
-                                    {{ $userRegistration->status === 'pending' ? 'bg-amber-500 text-white' : '' }}
-                                    {{ $userRegistration->status === 'rejected' ? 'bg-red-600 text-white' : '' }}
-                                    {{ $userRegistration->status === 'attended' ? 'bg-blue-600 text-white' : '' }}
-                                    {{ $userRegistration->status === 'cancelled' ? 'bg-gray-600 text-white' : '' }}">
-                                    Status: {{ $userRegistration->status }}
-                                </span>
-
-                                @if(in_array($userRegistration->status, ['approved', 'attended']))
-                                    <a href="{{ route('registrations.ticket', $userRegistration) }}" class="px-3.5 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-lg transition shadow flex items-center space-x-1">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path>
-                                        </svg>
-                                        <span>Lihat E-Tiket</span>
-                                    </a>
-                                @endif
-
-                                @if($userRegistration->status === 'pending')
-                                    <form action="{{ route('registrations.cancel', $userRegistration) }}" method="POST" onsubmit="return confirm('Membatalkan pendaftaran?')">
-                                        @csrf
-                                        <button type="submit" class="px-3 py-1.5 bg-red-100 hover:bg-red-200 text-red-800 text-xs font-bold rounded-lg transition">
-                                            Batalkan
-                                        </button>
-                                    </form>
-                                @endif
-                            </div>
-                        </div>
-                    @elseif($event->isFull())
-                        <div class="p-6 bg-red-50 rounded-2xl border border-red-200 text-center">
-                            <h4 class="font-bold text-red-900 text-base">Kuota Pendaftaran Penuh</h4>
-                            <p class="text-xs text-red-700 mt-1">Maaf, kapasitas peserta untuk event ini sudah mencapai batas maksimal.</p>
-                        </div>
-                    @elseif(in_array($event->status, ['completed', 'cancelled']))
-                        <div class="p-6 bg-gray-100 rounded-2xl border border-gray-200 text-center">
-                            <h4 class="font-bold text-gray-800 text-base">Pendaftaran Ditutup</h4>
-                            <p class="text-xs text-gray-600 mt-1">Event ini telah {{ $event->status === 'completed' ? 'selesai' : 'dibatalkan' }}.</p>
-                        </div>
-                    @else
-                        <!-- Registration Form -->
-                        <div class="p-6 bg-emerald-600 rounded-2xl text-white shadow-lg">
-                            <h4 class="font-bold text-lg mb-1">Daftar Event Sekarang</h4>
-                            <p class="text-emerald-100 text-xs mb-4">Pastikan data akun Anda sudah lengkap sebelum mendaftar.</p>
-
-                            <form action="{{ route('registrations.store') }}" method="POST" class="space-y-4">
-                                @csrf
-                                <input type="hidden" name="event_id" value="{{ $event->id }}">
-
+                    @if(Auth::user()->isPeserta())
+                        @if($userRegistration)
+                            <!-- Already Registered Status Box -->
+                            <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200 flex flex-col md:flex-row items-center justify-between gap-4">
                                 <div>
-                                    <label for="notes" class="block text-xs font-semibold text-emerald-100 mb-1">Catatan Tambahan / Perwakilan Kelas (Opsional)</label>
-                                    <input type="text" name="notes" id="notes" placeholder="Contoh: Perwakilan kelas XI-2 / Tim Futsal A"
-                                        class="w-full px-4 py-2 rounded-xl text-gray-900 text-sm focus:ring-2 focus:ring-emerald-300">
+                                    <h4 class="font-bold text-emerald-900 text-base">Anda Telah Mendaftar Event Ini</h4>
+                                    <p class="text-xs text-emerald-700 mt-0.5">
+                                        Tanggal Pendaftaran: {{ $userRegistration->registration_date->format('d M Y, H:i') }} WIB
+                                    </p>
                                 </div>
+                                <div class="flex items-center space-x-3">
+                                    <span class="px-3 py-1.5 rounded-lg font-bold text-xs uppercase shadow-sm
+                                        {{ $userRegistration->status === 'approved' ? 'bg-emerald-600 text-white' : '' }}
+                                        {{ $userRegistration->status === 'pending' ? 'bg-amber-500 text-white' : '' }}
+                                        {{ $userRegistration->status === 'rejected' ? 'bg-red-600 text-white' : '' }}
+                                        {{ $userRegistration->status === 'attended' ? 'bg-blue-600 text-white' : '' }}
+                                        {{ $userRegistration->status === 'cancelled' ? 'bg-gray-600 text-white' : '' }}">
+                                        Status: {{ $userRegistration->status }}
+                                    </span>
 
-                                <button type="submit" class="w-full sm:w-auto px-8 py-3 bg-white hover:bg-emerald-50 text-emerald-800 font-bold rounded-xl shadow transition text-sm">
-                                    Kirim Pendaftaran Event &rarr;
-                                </button>
-                            </form>
+                                    @if(in_array($userRegistration->status, ['approved', 'attended']))
+                                        <a href="{{ route('registrations.ticket', $userRegistration) }}" class="px-3.5 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-lg transition shadow flex items-center space-x-1">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path>
+                                            </svg>
+                                            <span>Lihat E-Tiket</span>
+                                        </a>
+                                    @endif
+
+                                    @if($userRegistration->status === 'pending')
+                                        <form action="{{ route('registrations.cancel', $userRegistration) }}" method="POST" onsubmit="return confirm('Membatalkan pendaftaran?')">
+                                            @csrf
+                                            <button type="submit" class="px-3 py-1.5 bg-red-100 hover:bg-red-200 text-red-800 text-xs font-bold rounded-lg transition">
+                                                Batalkan
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
+                            </div>
+                        @elseif($event->isFull())
+                            <div class="p-6 bg-red-50 rounded-2xl border border-red-200 text-center">
+                                <h4 class="font-bold text-red-900 text-base">Kuota Pendaftaran Penuh</h4>
+                                <p class="text-xs text-red-700 mt-1">Maaf, kapasitas peserta untuk event ini sudah mencapai batas maksimal.</p>
+                            </div>
+                        @elseif(in_array($event->status, ['completed', 'cancelled']))
+                            <div class="p-6 bg-gray-100 rounded-2xl border border-gray-200 text-center">
+                                <h4 class="font-bold text-gray-800 text-base">Pendaftaran Ditutup</h4>
+                                <p class="text-xs text-gray-600 mt-1">Event ini telah {{ $event->status === 'completed' ? 'selesai' : 'dibatalkan' }}.</p>
+                            </div>
+                        @else
+                            <!-- Registration Form for Peserta -->
+                            <div class="p-6 bg-emerald-600 rounded-2xl text-white shadow-lg">
+                                <h4 class="font-bold text-lg mb-1">Daftar Event Sekarang</h4>
+                                <p class="text-emerald-100 text-xs mb-4">Pastikan data akun Anda sudah lengkap sebelum mendaftar.</p>
+
+                                <form action="{{ route('registrations.store') }}" method="POST" class="space-y-4">
+                                    @csrf
+                                    <input type="hidden" name="event_id" value="{{ $event->id }}">
+
+                                    <div>
+                                        <label for="notes" class="block text-xs font-semibold text-emerald-100 mb-1">Catatan Tambahan / Perwakilan Kelas (Opsional)</label>
+                                        <input type="text" name="notes" id="notes" placeholder="Contoh: Perwakilan kelas XI-2 / Tim Futsal A"
+                                            class="w-full px-4 py-2 rounded-xl text-gray-900 text-sm focus:ring-2 focus:ring-emerald-300">
+                                    </div>
+
+                                    <button type="submit" class="w-full sm:w-auto px-8 py-3 bg-white hover:bg-emerald-50 text-emerald-800 font-bold rounded-xl shadow transition text-sm">
+                                        Kirim Pendaftaran Event &rarr;
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
+
+                    @else
+                        {{-- Panel untuk Admin dan Panitia (Tidak Mendaftar, Hanya Mengelola) --}}
+                        <div class="p-6 bg-gray-50 dark:bg-gray-800/70 rounded-2xl border border-gray-200 dark:border-gray-700 flex flex-col md:flex-row items-center justify-between gap-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="p-3 bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 rounded-xl">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-900 dark:text-white text-sm">Mode Pengelola ({{ ucfirst(Auth::user()->role) }})</h4>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                                        Akun {{ ucfirst(Auth::user()->role) }} bertindak sebagai pengelola dan tidak dapat mendaftar sebagai peserta.
+                                    </p>
+                                </div>
+                            </div>
+
+                            @if(Auth::user()->isAdmin() || (Auth::user()->isPanitia() && $event->created_by === Auth::id()))
+                                <a href="{{ route('registrations.index', ['event_id' => $event->id]) }}" 
+                                   class="inline-flex items-center space-x-1.5 px-4 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl shadow transition flex-shrink-0">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                                    </svg>
+                                    <span>Kelola Peserta Event Ini ({{ $event->active_registrations_count }})</span>
+                                </a>
+                            @endif
                         </div>
                     @endif
+
                 @else
-                    <div class="p-6 bg-emerald-50 rounded-2xl border border-emerald-200 text-center">
-                        <p class="text-sm font-semibold text-emerald-900 mb-3">Silakan login terlebih dahulu untuk mendaftar pada event ini.</p>
-                        <a href="{{ route('login') }}" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition inline-block">
-                            Login Sekarang
-                        </a>
+                    <div class="p-6 bg-emerald-50 dark:bg-gray-800/80 rounded-2xl border border-emerald-200 dark:border-gray-700 text-center space-y-3">
+                        <div class="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/60 rounded-full flex items-center justify-center mx-auto text-emerald-700 dark:text-emerald-300">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                        </div>
+                        <h4 class="font-bold text-base text-emerald-900 dark:text-emerald-300">Login untuk Mendaftar Event</h4>
+                        <p class="text-xs text-emerald-700 dark:text-gray-300 max-w-md mx-auto">
+                            Pendaftaran event hanya dapat dilakukan oleh akun dengan role Peserta yang telah masuk ke sistem.
+                        </p>
+                        <div class="pt-2">
+                            <a href="{{ route('login') }}" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition inline-flex items-center space-x-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                                </svg>
+                                <span>Masuk ke Akun Anda</span>
+                            </a>
+                        </div>
                     </div>
                 @endauth
             </div>

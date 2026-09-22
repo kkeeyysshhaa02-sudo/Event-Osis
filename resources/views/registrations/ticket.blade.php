@@ -42,7 +42,7 @@
                     E-TIKET RESMI OSIS
                 </span>
                 <h2 class="text-xl font-extrabold tracking-tight">Event-Osis Digital Ticket</h2>
-                <p class="text-emerald-100 text-xs">SMK Negeri OSIS &bull; {{ $registration->event->category->name }}</p>
+                <p class="text-emerald-100 text-xs">SMK Pesat &bull; {{ $registration->event->category->name }}</p>
             </div>
             
             <div class="text-right z-10">
@@ -91,13 +91,13 @@
 
                 <div>
                     <span class="font-bold text-gray-400 uppercase tracking-wider block text-[10px]">Waktu Pelaksanaan</span>
-                    <span class="font-bold text-emerald-800 block mt-0.5">📅 {{ $registration->event->event_date->format('d M Y') }}</span>
+                    <span class="font-bold text-emerald-800 block mt-0.5"> {{ $registration->event->event_date->format('d M Y') }}</span>
                     <span class="text-gray-600 font-medium">Jam: {{ $registration->event->event_date->format('H:i') }} WIB</span>
                 </div>
 
                 <div>
                     <span class="font-bold text-gray-400 uppercase tracking-wider block text-[10px]">Lokasi Event</span>
-                    <span class="font-bold text-gray-900 block mt-0.5">📍 {{ $registration->event->location }}</span>
+                    <span class="font-bold text-gray-900 block mt-0.5"> {{ $registration->event->location }}</span>
                 </div>
             </div>
 

@@ -54,7 +54,7 @@
             </form>
 
             <!-- Quick Demo Credentials Box -->
-            <div class="mt-8 p-4 bg-emerald-50 rounded-xl border border-emerald-200 text-xs text-emerald-900">
+            <!-- <div class="mt-8 p-4 bg-emerald-50 rounded-xl border border-emerald-200 text-xs text-emerald-900">
                 <p class="font-bold text-emerald-800 mb-2 flex items-center">
                     <svg class="w-4 h-4 mr-1 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -66,12 +66,12 @@
                     <p><span class="font-bold text-emerald-700">Panitia:</span> panitia@osis.sch.id / password</p>
                     <p><span class="font-bold text-emerald-700">Peserta:</span> peserta@osis.sch.id / password</p>
                 </div>
-            </div>
+            </div> -->
 
-            <p class="text-center text-xs text-gray-600 mt-6">
-                Belum memiliki akun? 
-                <a href="{{ route('register') }}" class="text-emerald-700 font-bold hover:underline">Daftar Akun Baru</a>
-            </p>
+            <div class="mt-6 p-3.5 bg-emerald-50 rounded-xl border border-emerald-200 text-center">
+                <p class="text-xs text-emerald-800 font-semibold">Belum memiliki akun?</p>
+                <p class="text-[11px] text-emerald-600 mt-0.5">Akun peserta dan panitia dibuat &amp; dikelola langsung oleh Administrator OSIS SMK Pesat.</p>
+            </div>
         </div>
     </div>
 </div>

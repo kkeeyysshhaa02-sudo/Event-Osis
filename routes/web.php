@@ -4,15 +4,14 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-// Redirect root to events
-Route::get('/', function () {
-    return redirect()->route('events.index');
-});
+// Landing page
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Public Event Catalogue & Detail (Accessible by both Guests and Authenticated Users)
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
@@ -21,8 +20,6 @@ Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
-    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-    Route::post('/register', [AuthController::class, 'register']);
 });
 
 // Authenticated Routes
@@ -59,6 +56,8 @@ Route::middleware('auth')->group(function () {
 
         // User Management (Admin only)
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
+        Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+        Route::post('/users', [UserController::class, 'store'])->name('users.store');
         Route::patch('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
         Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     });

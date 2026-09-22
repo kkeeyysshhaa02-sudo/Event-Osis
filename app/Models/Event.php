@@ -76,11 +76,11 @@ class Event extends Model
 
     public function availableSeats(): int
     {
-        $approvedCount = $this->registrations()
-            ->whereIn('status', ['approved', 'attended', 'pending'])
-            ->count();
+        $registeredCount = array_key_exists('active_registrations_count', $this->getAttributes()) || isset($this->active_registrations_count)
+            ? (int) $this->active_registrations_count
+            : $this->registrations()->whereIn('status', ['approved', 'attended', 'pending'])->count();
 
-        return max(0, $this->capacity - $approvedCount);
+        return max(0, $this->capacity - $registeredCount);
     }
 
     public function isFull(): bool

@@ -6,6 +6,8 @@ use App\Http\Requests\StoreRegistrationRequest;
 use App\Models\Event;
 use App\Models\Registration;
 use App\Notifications\EventRegisteredNotification;
+use App\Notifications\NewParticipantRegisteredNotification;
+use App\Notifications\ParticipantCancelledRegistrationNotification;
 use App\Notifications\RegistrationStatusChangedNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,6 +19,12 @@ class RegistrationController extends Controller
     public function store(StoreRegistrationRequest $request): RedirectResponse
     {
         $user = Auth::user();
+
+        // 0. Only Peserta can register for events
+        if (! $user->isPeserta()) {
+            return back()->with('error', 'Akun Admin dan Panitia tidak dapat mendaftar event.');
+        }
+
         $event = Event::findOrFail($request->event_id);
 
         // 1. Check if event is completed or cancelled
@@ -47,12 +55,12 @@ class RegistrationController extends Controller
             'notes' => $request->notes,
         ]);
 
-        // Send notification to registering user
+        // Send confirmation notification to registering participant
         $user->notify(new EventRegisteredNotification($registration));
 
-        // Send notification to event creator / admin
+        // Send new participant notification to event creator / panitia
         if ($event->creator && $event->creator->id !== $user->id) {
-            $event->creator->notify(new EventRegisteredNotification($registration));
+            $event->creator->notify(new NewParticipantRegisteredNotification($registration));
         }
 
         return redirect()->route('registrations.my')
@@ -78,6 +86,11 @@ class RegistrationController extends Controller
         }
 
         $registration->update(['status' => 'cancelled']);
+
+        // Notify panitia/creator if participant cancelled
+        if ($registration->event->creator && $registration->event->creator->id !== $user->id) {
+            $registration->event->creator->notify(new ParticipantCancelledRegistrationNotification($registration));
+        }
 
         return back()->with('success', 'Pendaftaran event berhasil dibatalkan.');
     }
